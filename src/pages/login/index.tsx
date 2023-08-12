@@ -21,7 +21,7 @@ const Login = () => {
   const [show, setShow] = React.useState(false)
   const handleClick = () => setShow(!show)
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
 
@@ -50,10 +50,10 @@ const Login = () => {
         setLoading(false);
         setError('Invalid credentials');
       }
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
       console.log(error)
-      setError(error.message);
+      setError(error?.message);
     }
   };
 
@@ -62,7 +62,12 @@ const Login = () => {
       <Container maxW='2xl' minHeight="100vh" centerContent justifyContent="center">
         <Box padding='8' borderRadius="5" bg='gray.300' color='black' maxW='lg' width='100%'>
           <Stack spacing={4}>
-            <Heading as='h3' size='lg' align="center" paddingBottom="16px">
+            <Heading as='h3' size='lg'
+                     paddingBottom="16px"
+                     style={{
+                       textAlign: "center",
+                     }}
+            >
               Login
             </Heading>
             <FormControl isRequired>
