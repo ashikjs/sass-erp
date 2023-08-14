@@ -12,6 +12,7 @@ import NextLink from 'next/link'
 import { Link } from '@chakra-ui/react'
 
 import {HamburgerIcon, CloseIcon} from '@chakra-ui/icons'
+import React from "react";
 
 interface Props {
     children: React.ReactNode
@@ -49,7 +50,7 @@ export default function Navigation() {
                     <HStack spacing={8} alignItems={'right'}>
                         <HStack as={'nav'} spacing={4} display={{base: 'none', md: 'flex'}}>
                             {Links.map((link) => (
-                                <Link as={NextLink} href={link.link}>{link.name}</Link>
+                                <Link as={NextLink} href={link.link} key={link.link}>{link.name}</Link>
                             ))}
                         </HStack>
                     </HStack>
@@ -59,7 +60,7 @@ export default function Navigation() {
                     <Box pb={4} display={{md: 'none'}}>
                         <Stack as={'nav'} spacing={4}>
                             {Links.map((link) => (
-                                <Link as={NextLink} href={link.link}>{link.name}</Link>
+                                <Link as={NextLink} href={link.link} key={link.link}>{link.name}</Link>
                             ))}
                         </Stack>
                     </Box>
