@@ -13,7 +13,9 @@ import {
 import {useRouter} from "next/router";
 
 const Login = () => {
-  const apiEndpoint = process.env.API_ENDPOINT || 'http://localhost:3000/api/auth/login';
+  // console.log(process.env.API_ENDPOINT)
+  const URL: string = 'http://smb-erp-api.mdashikjs.com/api/auth/login'
+  const apiEndpoint = URL;
   const router = useRouter();
 
   const [userName, setUserName] = useState('');
@@ -33,16 +35,11 @@ const Login = () => {
     }
 
     try {
-      const corsHeaders = {
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      };
-
       const response = await fetch(apiEndpoint, {
         method: 'POST',
-        headers: corsHeaders,
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify(payload)
       });
 
