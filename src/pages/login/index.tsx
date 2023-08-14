@@ -10,9 +10,11 @@ import {
   InputRightElement,
   Stack
 } from "@chakra-ui/react";
+import {useRouter} from "next/router";
 
 const Login = () => {
-  const apiEndpoint = process.env.API_ENDPOINT || 'https://smb-erp-api.mdashikjs.com/api/auth/login';
+  const apiEndpoint = process.env.API_ENDPOINT || 'http://localhost:3000/api/auth/login';
+  const router = useRouter();
 
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
@@ -44,7 +46,7 @@ const Login = () => {
         setUserName('');
         setPassword('');
         setLoading(false);
-        window.location.href = '/';
+        router.push('/');
       } else {
         console.log(response)
         setLoading(false);
