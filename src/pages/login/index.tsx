@@ -13,9 +13,10 @@ import {
 import {useRouter} from "next/router";
 
 const Login = () => {
-  // console.log(process.env.API_ENDPOINT)
-  const URL: string = 'http://smb-erp-api.mdashikjs.com/api/auth/login'
-  const apiEndpoint = URL;
+  console.log(process.env.API_ENDPOINT)
+  // const apiEndpoint: string = 'http://smb-erp-api.mdashikjs.com/api/auth/login'
+  const apiEndpoint: string = 'http://localhost:3000/api/auth/login'
+
   const router = useRouter();
 
   const [userName, setUserName] = useState('');
