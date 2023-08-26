@@ -11,11 +11,12 @@ import {
   Stack
 } from "@chakra-ui/react";
 import {useRouter} from "next/router";
+import Cookies from 'js-cookie';
 
 const Login = () => {
   console.log(process.env.API_ENDPOINT)
-  const apiEndpoint: string = 'https://smb-erp-api.mdashikjs.com/api/auth/login'
-  // const apiEndpoint: string = 'http://localhost:3000/api/auth/login'
+  // const apiEndpoint: string = 'https://smb-erp-api.mdashikjs.com/api/auth/login'
+  const apiEndpoint: string = 'http://localhost:3000/api/auth/login'
 
   const router = useRouter();
 
@@ -45,11 +46,11 @@ const Login = () => {
       });
 
       if (response.ok) {
-        console.log(response)
-        setUserName('');
-        setPassword('');
-        setLoading(false);
+        const responseData = await response.json();
+        console.log('access_token::', responseData.access_token)
+        Cookies.set('authToken', responseData.access_token, { expires: 7 }); // Expires in 7 days
         router.push('/');
+        setLoading(false);
       } else {
         console.log(response)
         setLoading(false);
