@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import {Table, Thead, Tbody, Tr, Th, Td, Flex, Button, Container} from '@chakra-ui/react';
+import React, {useEffect, useState} from 'react';
+import {Button, Container, Flex, Heading} from '@chakra-ui/react';
+
 import axiosApi from "src/app/utiles/axiosApi";
 import ProductList from "src/app/components/productList/ProductList";
 import Pagination from "src/app/components/pagination/Pagination";
@@ -22,8 +23,7 @@ const ProductsPage = () => {
 
   const fetchProducts = async (page, size) => {
     try {
-      const response = await axiosApi.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/products?page=${page}&pageSize=${size}`);
-      // console.log(Math.ceil(response.data?.total / pageSize))
+      const response = await axiosApi.get(`/products?page=${page}&pageSize=${size}`);
       setTotalPages(Math.ceil(response.data?.total / pageSize))
       setProducts(response.data?.datas);
     } catch (error) {
@@ -34,7 +34,7 @@ const ProductsPage = () => {
   return (
     <Container maxW='container.xl'>
       <Flex justifyContent="space-between" alignItems="center" marginBottom="20px" marginTop="40px">
-        <h1>Products</h1>
+        <Heading>Products</Heading>
         <Button colorScheme="blue">Add Product</Button>
       </Flex>
       <ProductList products={products}/>
