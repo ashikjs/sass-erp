@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js';
 import {useEffect, useState} from "react";
 
-const SECRET_KEY = 'your-secret-key';
+const SECRET_KEY = 'WhisperJade9$';
 
 const encryptData = (data) => {
   const dataString = JSON.stringify(data);
