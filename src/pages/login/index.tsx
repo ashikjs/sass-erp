@@ -12,6 +12,11 @@ import {
 } from "@chakra-ui/react";
 import {useRouter} from "next/router";
 import Cookies from 'js-cookie';
+import jwt_decode from "jwt-decode";
+
+// @Services
+import {LocalStorageService} from "src/app/utiles/localStorageService";
+
 
 const Login = () => {
   console.log(process.env.API_ENDPOINT)
@@ -47,8 +52,11 @@ const Login = () => {
 
       if (response.ok) {
         const responseData = await response.json();
-        console.log('access_token::', responseData.access_token)
-        Cookies.set('authToken', responseData.access_token, { expires: 7 }); // Expires in 7 days
+        // console.log('access_token::', responseData.access_token)
+        const decodedToken = jwt_decode(responseData.access_token);
+        const expireDate: number = (decodedToken.exp - decodedToken.iat)/(60*60*24)
+        Cookies.set('authToken', responseData.access_token, { expires: expireDate }); // Expires in 7 days
+        LocalStorageService.setItem('user', decodedToken);
         router.push('/');
         setLoading(false);
       } else {
