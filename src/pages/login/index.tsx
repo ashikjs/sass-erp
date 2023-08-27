@@ -19,11 +19,11 @@ import localStorageService from "src/app/utiles/localStorageService";
 
 
 const Login = () => {
-  // console.log(process.env.API_ENDPOINT)
+  console.log('API_ENDPOINT:: ', process.env.NEXT_PUBLIC_API_ENDPOINT)
   const {SetItemToLStorage} = localStorageService()
 
   // const apiEndpoint: string = 'https://smb-erp-api.mdashikjs.com/api/auth/login'
-  const apiEndpoint: string = 'http://localhost:3000/api/auth/login'
+  const apiEndpoint: string = process.env.NEXT_PUBLIC_API_ENDPOINT + '/auth/login'
 
   const router = useRouter();
 
