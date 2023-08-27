@@ -3,6 +3,8 @@ import Cookies from 'js-cookie';
 
 const axiosApi = axios.create();
 
+axiosApi.defaults.baseURL = process.env.NEXT_PUBLIC_API_ENDPOINT;
+
 axiosApi.interceptors.request.use(
   (config) => {
     const authToken = Cookies.get('authToken');

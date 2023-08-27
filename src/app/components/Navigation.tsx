@@ -23,11 +23,15 @@ const Links = [
   },
   {
     name: 'Products',
-    link: 'products'
+    link: '/products'
+  },
+  {
+    name: 'Products Category',
+    link: '/product-categories'
   },
   {
     name: 'Product Request',
-    link: 'product-request'
+    link: '/product-request'
   },
 ]
 
@@ -74,9 +78,17 @@ export default function Navigation() {
         {isOpen ? (
           <Box pb={4} display={{md: 'none'}}>
             <Stack as={'nav'} spacing={4}>
-              {Links.map((link) => (
-                <Link as={NextLink} href={link.link} key={link.link}>{link.name}</Link>
-              ))}
+              {
+                isLoginUser && Links.map((link) => (
+                  <Link as={NextLink} href={link.link} key={link.link}>{link.name}</Link>
+                ))
+              }
+              {
+                !isLoginUser && <Link href='/login' key='login'>Login</Link>
+              }
+              {
+                isLoginUser && <Button variant='ghost' onClick={onLogout}>Logout</Button>
+              }
             </Stack>
           </Box>
         ) : null}
