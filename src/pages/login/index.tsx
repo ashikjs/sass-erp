@@ -15,11 +15,13 @@ import Cookies from 'js-cookie';
 import jwt_decode from "jwt-decode";
 
 // @Services
-import {LocalStorageService} from "src/app/utiles/localStorageService";
+import localStorageService from "src/app/utiles/localStorageService";
 
 
 const Login = () => {
-  console.log(process.env.API_ENDPOINT)
+  // console.log(process.env.API_ENDPOINT)
+  const {SetItemToLStorage} = localStorageService()
+
   // const apiEndpoint: string = 'https://smb-erp-api.mdashikjs.com/api/auth/login'
   const apiEndpoint: string = 'http://localhost:3000/api/auth/login'
 
@@ -45,7 +47,7 @@ const Login = () => {
       const response = await fetch(apiEndpoint, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
       });
@@ -54,9 +56,9 @@ const Login = () => {
         const responseData = await response.json();
         // console.log('access_token::', responseData.access_token)
         const decodedToken = jwt_decode(responseData.access_token);
-        const expireDate: number = (decodedToken.exp - decodedToken.iat)/(60*60*24)
-        Cookies.set('authToken', responseData.access_token, { expires: expireDate }); // Expires in 7 days
-        LocalStorageService.setItem('user', decodedToken);
+        const expireDate: number = (decodedToken.exp - decodedToken.iat) / (60 * 60 * 24)
+        Cookies.set('authToken', responseData.access_token, {expires: expireDate}); // Expires in 7 days
+        SetItemToLStorage('user', decodedToken);
         router.push('/');
         setLoading(false);
       } else {
