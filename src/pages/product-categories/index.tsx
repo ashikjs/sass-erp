@@ -3,6 +3,8 @@ import {Button, Container, Flex, Heading} from '@chakra-ui/react';
 
 import axiosApi from "src/app/utiles/axiosApi";
 import ProductCategoryList from "src/app/components/productCategoryList/ProductCategoryList";
+import NextLink from "next/link";
+import Link from "next/link";
 
 const ProductCategoriesPage = () => {
   const [productCategories, setProductCategories] = useState([]);
@@ -26,7 +28,9 @@ const ProductCategoriesPage = () => {
     <Container maxW='container.xl'>
       <Flex justifyContent="space-between" alignItems="center" marginBottom="20px" marginTop="40px">
         <Heading>Product Categories</Heading>
-        <Button colorScheme="blue">Add Product Category</Button>
+        <NextLink href="/product-categories/create" passHref>
+          <Button colorScheme="blue">Add Product Category</Button>
+        </NextLink>
       </Flex>
       <ProductCategoryList categories={productCategories}/>
     </Container>
