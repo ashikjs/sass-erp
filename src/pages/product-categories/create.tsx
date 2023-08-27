@@ -1,15 +1,29 @@
 import React, {useState} from 'react';
-import {Container, Box, Heading, FormControl, FormLabel, Input, Button, Textarea, Select} from '@chakra-ui/react';
+import {
+  Container,
+  Box,
+  Heading,
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  Textarea,
+  Select,
+  useToast
+} from '@chakra-ui/react';
 import axiosApi from "src/app/utiles/axiosApi";
 
 const CreateProductCategory = () => {
-  const [formData, setFormData] = useState({
+  const toast = useToast(); // Initialize useToast
+
+  const formInitialValues = {
     name: '',
     status: 'ACTIVE',
     parentID: null,
     description: '',
-    imageUrl: '',
-  });
+    imageUrl: null,
+  }
+  const [formData, setFormData] = useState(formInitialValues);
 
   const categories = []
   const handleChange = (e) => {
@@ -22,11 +36,19 @@ const CreateProductCategory = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log('handleSubmit', formData)
     try {
-      const response = await axiosApi.post('/product-categories', formData);
-      console.log('Category created:', response.data);
-      // Redirect or show success message
+      const response = await axiosApi.post('/categories', formData);
+      // Show success toast notification
+      toast({
+        title: 'Category Created',
+        description: 'The product category has been created successfully.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      // Reset the form
+      setFormData(formInitialValues);
     } catch (error) {
       console.error('Error creating category:', error);
       // Handle error or show error message
@@ -48,21 +70,21 @@ const CreateProductCategory = () => {
               required
             />
           </FormControl>
-          <FormControl>
-            <FormLabel>Parent Category</FormLabel>
-            <Select
-              name="parentID"
-              value={formData.parentID || ''}
-              onChange={handleChange}
-            >
-              <option value="">Select a parent category</option>
-              {categories?.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
+          {/*<FormControl>*/}
+          {/*  <FormLabel>Parent Category</FormLabel>*/}
+          {/*  <Select*/}
+          {/*    name="parentID"*/}
+          {/*    value={formData.parentID || ''}*/}
+          {/*    onChange={handleChange}*/}
+          {/*  >*/}
+          {/*    <option value="">Select a parent category</option>*/}
+          {/*    {categories?.map((category) => (*/}
+          {/*      <option key={category.id} value={category.id}>*/}
+          {/*        {category.name}*/}
+          {/*      </option>*/}
+          {/*    ))}*/}
+          {/*  </Select>*/}
+          {/*</FormControl>*/}
           <FormControl>
             <FormLabel>Description</FormLabel>
             <Textarea
@@ -72,15 +94,15 @@ const CreateProductCategory = () => {
               onChange={handleChange}
             />
           </FormControl>
-          <FormControl>
-            <FormLabel>Image URL</FormLabel>
-            <Input
-              type="url"
-              name="imageUrl"
-              value={formData.imageUrl}
-              onChange={handleChange}
-            />
-          </FormControl>
+          {/*<FormControl>*/}
+          {/*  <FormLabel>Image URL</FormLabel>*/}
+          {/*  <Input*/}
+          {/*    type="url"*/}
+          {/*    name="imageUrl"*/}
+          {/*    value={formData.imageUrl}*/}
+          {/*    onChange={handleChange}*/}
+          {/*  />*/}
+          {/*</FormControl>*/}
           <Button type="submit" colorScheme="blue" mt={4}>
             Create
           </Button>
