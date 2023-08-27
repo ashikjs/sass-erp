@@ -13,6 +13,7 @@ import {
 import {useRouter} from "next/router";
 import Cookies from 'js-cookie';
 import jwt_decode from "jwt-decode";
+import axios from "axios";
 
 // @Services
 import localStorageService from "src/app/utiles/localStorageService";
@@ -44,19 +45,19 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch(apiEndpoint, {
-        method: 'POST',
+      const response = await axios.post(apiEndpoint, payload, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload)
       });
 
-      if (response.ok) {
-        const responseData = await response.json();
+      if (response.status === 200) {
+        const responseData = response.data;
         // console.log('access_token::', responseData.access_token)
         const decodedToken = jwt_decode(responseData.access_token);
         const expireDate: number = (decodedToken.exp - decodedToken.iat) / (60 * 60 * 24)
+
+        // Set cookies and local storage as before
         Cookies.set('authToken', responseData.access_token, {expires: expireDate}); // Expires in 7 days
         SetItemToLStorage('user', decodedToken);
         router.push('/');
