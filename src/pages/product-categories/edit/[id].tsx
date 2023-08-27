@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Container, Box, Heading, Text } from '@chakra-ui/react';
 import axiosApi from "src/app/utiles/axiosApi";
 
-const ProductUpdate = () => {
+const ProductCategoryUpdate = () => {
   const router = useRouter();
   const { id } = router.query; // Get the id parameter from the URL
   const [product, setProduct] = useState(null);
@@ -14,7 +14,7 @@ const ProductUpdate = () => {
     console.log(id)
     if (id) {
       // Fetch product details using axios
-      axiosApi.get(`/products/${id}`)
+      axiosApi.get(`/categories/${id}`)
         .then((response) => {
           setProduct(response.data);
           setLoading(false);
@@ -53,4 +53,4 @@ const ProductUpdate = () => {
   );
 };
 
-export default ProductUpdate;
+export default ProductCategoryUpdate;

@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { Container, Box, Heading, Text } from '@chakra-ui/react';
+import React, {useState, useEffect} from 'react';
+import {useRouter} from 'next/router';
+import {Container, Box, Heading, Text} from '@chakra-ui/react';
+
 import axiosApi from "src/app/utiles/axiosApi";
 
-const ProductUpdate = () => {
+const ProductCategoryDetails = () => {
   const router = useRouter();
-  const { id } = router.query; // Get the id parameter from the URL
+  const {id} = router.query; // Get the id parameter from the URL
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,7 +15,7 @@ const ProductUpdate = () => {
     console.log(id)
     if (id) {
       // Fetch product details using axios
-      axiosApi.get(`/products/${id}`)
+      axiosApi.get(`/categories/${id}`)
         .then((response) => {
           setProduct(response.data);
           setLoading(false);
@@ -42,8 +43,10 @@ const ProductUpdate = () => {
         {product ? (
           <>
             <Heading size="md" paddingBottom={2}>{product.name}</Heading>
-            <Text paddingBottom={1}><b>_id</b>: {product._id}</Text>
             <Text paddingBottom={1}><b>Price</b>: {product.price}</Text>
+            <Text paddingBottom={1}><b>Category</b>: {product.category?.name}</Text>
+            <Text paddingBottom={1}><b>Quantity</b>: {product.quantity}</Text>
+            <Text paddingBottom={1}><b>Description</b>: {product.description}</Text>
           </>
         ) : (
           <Text>No product found.</Text>
@@ -53,4 +56,4 @@ const ProductUpdate = () => {
   );
 };
 
-export default ProductUpdate;
+export default ProductCategoryDetails;
