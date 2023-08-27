@@ -4,6 +4,7 @@ import {Button, Container, Flex, Heading} from '@chakra-ui/react';
 import axiosApi from "src/app/utiles/axiosApi";
 import ProductList from "src/app/components/productList/ProductList";
 import Pagination from "src/app/components/pagination/Pagination";
+import NextLink from "next/link";
 
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
@@ -35,7 +36,9 @@ const ProductsPage = () => {
     <Container maxW='container.xl'>
       <Flex justifyContent="space-between" alignItems="center" marginBottom="20px" marginTop="40px">
         <Heading>Products</Heading>
-        <Button colorScheme="blue">Add Product</Button>
+        <NextLink href="/products/create" passHref>
+          <Button colorScheme="blue">Add Product</Button>
+        </NextLink>
       </Flex>
       <ProductList products={products}/>
       <Pagination
