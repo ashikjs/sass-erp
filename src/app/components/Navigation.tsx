@@ -1,3 +1,4 @@
+import React from "react";
 import {
     Box,
     Flex,
@@ -5,14 +6,17 @@ import {
     IconButton,
     useDisclosure,
     useColorModeValue,
-    Stack,
+    Stack, Button,
 } from '@chakra-ui/react'
 import NextLink from 'next/link'
-
-import { Link } from '@chakra-ui/react'
-
+import {useRouter} from "next/router";
+import Cookies from 'js-cookie';
+import {Link} from '@chakra-ui/react'
 import {HamburgerIcon, CloseIcon} from '@chakra-ui/icons'
-import React from "react";
+
+// @Services
+import {LocalStorageService} from "src/app/utiles/localStorageService";
+
 
 interface Props {
     children: React.ReactNode
@@ -20,21 +24,28 @@ interface Props {
 
 const Links = [
     {
-        name: 'Login',
-        link: 'login'
-    },
-    {
         name: 'Home',
         link: '/'
     },
     {
-        name: 'Product',
-        link: 'product'
+        name: 'Products',
+        link: 'products'
+    },
+    {
+        name: 'Product Request',
+        link: 'product-request'
     },
 ]
 
 export default function Navigation() {
+    const router = useRouter();
     const {isOpen, onOpen, onClose} = useDisclosure()
+    const isLoginUser: boolean = !!LocalStorageService.getItem('user')
+    const onLogout = () => {
+        Cookies.remove('authToken');
+        LocalStorageService.removeItem('user');
+        router.push('/login');
+    }
 
     return (
         <>
@@ -49,9 +60,17 @@ export default function Navigation() {
                     />
                     <HStack spacing={8} alignItems={'right'}>
                         <HStack as={'nav'} spacing={4} display={{base: 'none', md: 'flex'}}>
-                            {Links.map((link) => (
-                                <Link as={NextLink} href={link.link} key={link.link}>{link.name}</Link>
-                            ))}
+                            {
+                                isLoginUser && Links.map((link) => (
+                                    <Link as={NextLink} href={link.link} key={link.link}>{link.name}</Link>
+                                ))
+                            }
+                            {
+                                !isLoginUser && <Link as={NextLink} href='/login' key='login'>Login</Link>
+                            }
+                            {
+                                isLoginUser && <Button variant='ghost' onClick={onLogout}>Logout</Button>
+                            }
                         </HStack>
                     </HStack>
                 </Flex>
