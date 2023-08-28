@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Container, Flex, Heading} from '@chakra-ui/react';
+import NextLink from "next/link";
 
 import axiosApi from "./../../app/utiles/axiosApi";
 import ProductCategoryList from "./../../app/components/productCategoryList/ProductCategoryList";
-import NextLink from "next/link";
 
 const ProductCategoriesPage = () => {
   const [productCategories, setProductCategories] = useState([]);
@@ -14,7 +14,7 @@ const ProductCategoriesPage = () => {
     fetchProducts(currentPage, pageSize);
   }, []);
 
-  const fetchProducts = async (page, size) => {
+  const fetchProducts = async (page: number, size: number) => {
     try {
       const response = await axiosApi.get(`/categories?page=${page}&pageSize=${size}`);
       setProductCategories(response.data);

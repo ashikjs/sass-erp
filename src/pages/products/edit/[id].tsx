@@ -6,12 +6,11 @@ import axiosApi from "./../../../app/utiles/axiosApi";
 const ProductUpdate = () => {
   const router = useRouter();
   const { id } = router.query; // Get the id parameter from the URL
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<any>(null);
 
   useEffect(() => {
-    console.log(id)
     if (id) {
       // Fetch product details using axios
       axiosApi.get(`/products/${id}`)
