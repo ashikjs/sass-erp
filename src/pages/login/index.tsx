@@ -16,12 +16,12 @@ import jwt_decode from "jwt-decode";
 import axios from "axios";
 
 // @Services
-import localStorageService from "src/app/utiles/localStorageService";
+import useLocalStorageService from "./../../app/utiles/useLocalStorageService";
 
 
 const Login = () => {
-  console.log('API_ENDPOINT:: ', process.env.NEXT_PUBLIC_API_ENDPOINT)
-  const {SetItemToLStorage} = localStorageService()
+  // console.log('API_ENDPOINT:: ', process.env.NEXT_PUBLIC_API_ENDPOINT)
+  const {SetItemToLStorage} = useLocalStorageService()
 
   // const apiEndpoint: string = 'https://smb-erp-api.mdashikjs.com/api/auth/login'
   const apiEndpoint: string = process.env.NEXT_PUBLIC_API_ENDPOINT + '/auth/login'
@@ -54,7 +54,7 @@ const Login = () => {
       if (response.status === 200) {
         const responseData = response.data;
         // console.log('access_token::', responseData.access_token)
-        const decodedToken = jwt_decode(responseData.access_token);
+        const decodedToken: any = jwt_decode(responseData.access_token);
         const expireDate: number = (decodedToken.exp - decodedToken.iat) / (60 * 60 * 24)
 
         // Set cookies and local storage as before

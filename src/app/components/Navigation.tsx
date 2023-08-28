@@ -14,7 +14,7 @@ import {Link} from '@chakra-ui/react'
 import {HamburgerIcon, CloseIcon} from '@chakra-ui/icons'
 
 // @Services
-import localStorageService from "src/app/utiles/localStorageService";
+import useLocalStorageService from "./../utiles/useLocalStorageService";
 
 const Links = [
   {
@@ -36,7 +36,7 @@ const Links = [
 ]
 
 export default function Navigation() {
-  const {GetItemFromLStorage, RemoveItemFromLStorage} = localStorageService()
+  const {GetItemFromLStorage, RemoveItemFromLStorage} = useLocalStorageService()
   const router = useRouter();
   const {isOpen, onOpen, onClose} = useDisclosure()
   const isLoginUser: boolean = !!GetItemFromLStorage('user')

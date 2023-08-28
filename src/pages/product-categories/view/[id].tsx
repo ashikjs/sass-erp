@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useRouter} from 'next/router';
 import {Container, Box, Heading, Text} from '@chakra-ui/react';
 
-import axiosApi from "src/app/utiles/axiosApi";
+import axiosApi from "./../../../app/utiles/axiosApi";
 
 const ProductCategoryDetails = () => {
   const router = useRouter();
@@ -16,11 +16,11 @@ const ProductCategoryDetails = () => {
     if (id) {
       // Fetch product details using axios
       axiosApi.get(`/categories/${id}`)
-        .then((response) => {
+        .then((response: any) => {
           setProductCategory(response.data);
           setLoading(false);
         })
-        .catch((error) => {
+        .catch((error: any) => {
           setError(error);
           setLoading(false);
         });

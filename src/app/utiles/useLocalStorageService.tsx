@@ -1,31 +1,31 @@
 import CryptoJS from 'crypto-js';
 import {useEffect, useState} from "react";
 
-const SECRET_KEY = process.env.NEXT_PUBLIC_SECRET_KEY;
+const SECRET_KEY: string = process.env.NEXT_PUBLIC_SECRET_KEY || '';
 
-const encryptData = (data) => {
-  const dataString = JSON.stringify(data);
+const encryptData = (data: string) => {
+  const dataString: string = JSON.stringify(data);
   return CryptoJS.AES.encrypt(dataString, SECRET_KEY).toString();
 };
 
-const decryptData = (encryptedData) => {
+const decryptData = (encryptedData: string) => {
   const bytes = CryptoJS.AES.decrypt(encryptedData, SECRET_KEY);
   return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 };
 
-const localStorageService = () => {
+const useLocalStorageService = () => {
   const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
     setIsClient(true)
   }, [])
 
-  const SetItemToLStorage = (key, data) => {
+  const SetItemToLStorage = (key: string, data: string) => {
     const encryptedData = encryptData(data);
     if (isClient) localStorage.setItem(key, encryptedData);
   }
 
-  const GetItemFromLStorage = (key) => {
+  const GetItemFromLStorage = (key: string) => {
     if (isClient) {
       const encryptedData = localStorage.getItem(key);
       if (encryptedData) {
@@ -35,10 +35,10 @@ const localStorageService = () => {
     return null;
   }
 
-  const RemoveItemFromLStorage = (key) => {
+  const RemoveItemFromLStorage = (key: string) => {
     if (isClient) localStorage.removeItem(key);
   }
   return {SetItemToLStorage, GetItemFromLStorage, RemoveItemFromLStorage};
 };
 
-export default localStorageService
+export default useLocalStorageService

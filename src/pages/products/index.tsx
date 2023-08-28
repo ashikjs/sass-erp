@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Container, Flex, Heading} from '@chakra-ui/react';
 
-import axiosApi from "src/app/utiles/axiosApi";
-import ProductList from "src/app/components/productList/ProductList";
-import Pagination from "src/app/components/pagination/Pagination";
+import axiosApi from "./../../app/utiles/axiosApi";
+import ProductList from "./../../app/components/productList/ProductList";
+import Pagination from "./../../app/components/pagination/Pagination";
 import NextLink from "next/link";
 
 const ProductsPage = () => {
@@ -14,7 +14,7 @@ const ProductsPage = () => {
 
   useEffect(() => {
     fetchProducts(currentPage, pageSize);
-  }, []);
+  }, [currentPage, pageSize]);
 
   const handlePageChange = (newPage) => {
     console.log('NewPage:LL:  ', newPage)
