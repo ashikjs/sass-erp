@@ -1,7 +1,13 @@
 import React from 'react';
 import {Button, Flex} from '@chakra-ui/react';
 
-const Pagination = ({currentPage, totalPages, onPageChange}) => {
+interface props {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: any
+}
+
+const Pagination = ({currentPage, totalPages, onPageChange}: props) => {
   const renderPageButtons = () => {
     const pagesToShow = Math.min(5, totalPages);
     const startPage = Math.max(currentPage - Math.floor(pagesToShow / 2), 0);

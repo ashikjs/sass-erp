@@ -11,7 +11,7 @@ import {
   Select,
   useToast
 } from '@chakra-ui/react';
-import axiosApi from "src/app/utiles/axiosApi";
+import axiosApi from "./../../app/utiles/axiosApi";
 
 const CreateProductCategory = () => {
   const toast = useToast(); // Initialize useToast
@@ -26,7 +26,7 @@ const CreateProductCategory = () => {
   const [formData, setFormData] = useState(formInitialValues);
 
   const categories = []
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const {name, value} = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -34,7 +34,7 @@ const CreateProductCategory = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     console.log('handleSubmit', formData)
     try {

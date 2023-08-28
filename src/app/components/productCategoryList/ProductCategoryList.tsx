@@ -5,7 +5,11 @@ import {EditIcon, ViewIcon} from "@chakra-ui/icons";
 
 import styles from './ProductCategoryList.module.scss';
 
-const ProductCategoryList = ({categories}) => {
+interface props {
+  categories: any[];
+}
+
+const ProductCategoryList = ({categories}: props) => {
   return (
     <Box overflowX="auto">
       <Table variant="simple" colorScheme="blackAlpha" rounded="md" className={styles['table-container']}>
@@ -26,7 +30,7 @@ const ProductCategoryList = ({categories}) => {
           </Tr>
         </Thead>
         <Tbody>
-          {categories?.map((category) => (
+          {categories?.map((category: any) => (
             <Tr key={category._id}
                 bgColor={category.status !== 'ACTIVE' ? 'gray.100' : 'white'}>
               <Td p={2}>{category.name}</Td>

@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Container, Flex, Heading} from '@chakra-ui/react';
 
-import axiosApi from "src/app/utiles/axiosApi";
-import ProductCategoryList from "src/app/components/productCategoryList/ProductCategoryList";
+import axiosApi from "./../../app/utiles/axiosApi";
+import ProductCategoryList from "./../../app/components/productCategoryList/ProductCategoryList";
 import NextLink from "next/link";
-import Link from "next/link";
 
 const ProductCategoriesPage = () => {
   const [productCategories, setProductCategories] = useState([]);

@@ -12,7 +12,7 @@ import {
   Textarea,
   Button, RadioGroup, Stack, Radio, HStack
 } from '@chakra-ui/react';
-import axiosApi from "src/app/utiles/axiosApi";
+import axiosApi from "./../../../app/utiles/axiosApi";
 
 const ProductCategoryUpdate = () => {
   const router = useRouter();
@@ -56,9 +56,8 @@ const ProductCategoryUpdate = () => {
     }
   }, [id]);
 
-  const categories = []
-  const handleChange = (e) => {
-    console.log(e)
+  const categories: any[] = []
+  const handleChange = (e: any) => {
     const {name, value} = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -66,7 +65,7 @@ const ProductCategoryUpdate = () => {
     }));
   };
 
-  const onStatusChange = (status) => {
+  const onStatusChange = (status: string) => {
     setFormData((prevData) => ({
       ...prevData,
       status: status,
