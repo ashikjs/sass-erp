@@ -25,10 +25,10 @@ const ProductCategoryUpdate = () => {
     description: '',
     imageUrl: null,
   }
-  const [formData, setFormData] = useState(formInitialValues);
-  const [productCategory, setProductCategory] = useState(null);
+  const [formData, setFormData] = useState<any>(formInitialValues);
+  const [productCategory, setProductCategory] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<any>(null);
 
   useEffect(() => {
     if (id) {
@@ -37,7 +37,7 @@ const ProductCategoryUpdate = () => {
         .then((response) => {
           const category = response.data
           setProductCategory(response.data)
-          setFormData((prevData) => ({
+          setFormData((prevData: any) => ({
             ...prevData,
             name: category.name,
             description: category.description,
@@ -59,22 +59,21 @@ const ProductCategoryUpdate = () => {
   const categories: any[] = []
   const handleChange = (e: any) => {
     const {name, value} = e.target;
-    setFormData((prevData) => ({
+    setFormData((prevData: any) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
   const onStatusChange = (status: string) => {
-    setFormData((prevData) => ({
+    setFormData((prevData: any) => ({
       ...prevData,
       status: status,
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log('handleSubmit', formData)
     try {
       const response = await axiosApi.post('/categories', formData);
       // Show success toast notification
@@ -147,7 +146,6 @@ const ProductCategoryUpdate = () => {
               <FormControl marginBottom={2} >
                 <FormLabel>Description</FormLabel>
                 <Textarea
-                  type="text"
                   name="description"
                   value={formData.description}
                   onChange={handleChange}

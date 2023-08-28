@@ -28,7 +28,7 @@ const CreateProductCategory = () => {
   const categories = []
   const handleChange = (e: any) => {
     const {name, value} = e.target;
-    setFormData((prevData) => ({
+    setFormData((prevData: any) => ({
       ...prevData,
       [name]: value,
     }));
@@ -88,7 +88,6 @@ const CreateProductCategory = () => {
           <FormControl>
             <FormLabel>Description</FormLabel>
             <Textarea
-              type="text"
               name="description"
               value={formData.description}
               onChange={handleChange}

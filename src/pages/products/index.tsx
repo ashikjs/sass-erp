@@ -16,13 +16,13 @@ const ProductsPage = () => {
     fetchProducts(currentPage, pageSize);
   }, [currentPage, pageSize]);
 
-  const handlePageChange = (newPage) => {
+  const handlePageChange = (newPage: number) => {
     console.log('NewPage:LL:  ', newPage)
     setCurrentPage(newPage);
     fetchProducts(newPage, pageSize);
   };
 
-  const fetchProducts = async (page, size) => {
+  const fetchProducts = async (page: number, size: number) => {
     try {
       const response = await axiosApi.get(`/products?page=${page}&pageSize=${size}`);
       setTotalPages(Math.ceil(response.data?.total / pageSize))
