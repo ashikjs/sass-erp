@@ -1,0 +1,19 @@
+.table-container {
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.table-column {
+  border-right: 1px solid #ddd;
+  padding: 8px;
+}
+
+.table-column:last-child {
+  border-right: none;
+}
+
+.add-button {
+  margin-left: auto;
+}
