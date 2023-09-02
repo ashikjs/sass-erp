@@ -17,7 +17,7 @@ const ProductsPage = () => {
   }, [currentPage, pageSize]);
 
   const handlePageChange = (newPage: number) => {
-    console.log('NewPage:LL:  ', newPage)
+    // console.log('NewPage:LL:  ', newPage)
     setCurrentPage(newPage);
     fetchProducts(newPage, pageSize);
   };
@@ -26,6 +26,7 @@ const ProductsPage = () => {
     try {
       const response = await axiosApi.get(`/products?page=${page}&pageSize=${size}`);
       setTotalPages(Math.ceil(response.data?.total / pageSize))
+      console.log(response.data)
       setProducts(response.data?.datas);
     } catch (error) {
       console.error('Error fetching products:', error);
