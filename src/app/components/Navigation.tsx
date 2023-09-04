@@ -26,6 +26,10 @@ const Links = [
     link: '/products'
   },
   {
+    name: 'Orders',
+    link: '/orders'
+  },
+  {
     name: 'Products Category',
     link: '/product-categories'
   },
