@@ -76,7 +76,7 @@ const CreateProductPage = () => {
         setIsSuccess(false);
       }, 1000*6);
       // Handle success, e.g., show a success message, reset the form, or redirect
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error creating product:", error);
       // Handle error, e.g., show an error message
     }
@@ -110,7 +110,7 @@ const CreateProductPage = () => {
               <NumberInput
                 name="quantity"
                 value={formData.quantity}
-                onChange={(valueString, valueNumber) => setFormData({...formData, quantity: valueNumber})}
+                onChange={(valueString: any, valueNumber: any) => setFormData({...formData, quantity: valueNumber})}
                 min={1}
                 isRequired={true}
               >
@@ -123,7 +123,7 @@ const CreateProductPage = () => {
               <NumberInput
                 name="price"
                 value={formData.price}
-                onChange={(valueString, valueNumber) => setFormData({...formData, price: valueNumber})}
+                onChange={(valueString: any, valueNumber: any) => setFormData({...formData, price: valueNumber})}
                 min={1}
                 step={0.01}
                 precision={2}

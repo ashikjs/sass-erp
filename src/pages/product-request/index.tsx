@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Container, Flex, Heading} from '@chakra-ui/react';
 
 import axiosApi from "./../../app/utiles/axiosApi";
-import ProductRequestList from "src/app/components/productRequestList/ProductRequestList";
+import ProductRequestList from "./../../app/components/productRequestList/ProductRequestList";
 
 const ProductRequestPage = () => {
   const [productRequests, setProductRequests] = useState([]);
