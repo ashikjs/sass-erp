@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Button, Container, Flex, Heading} from '@chakra-ui/react';
 
 import axiosApi from "./../../app/utiles/axiosApi";
@@ -12,25 +12,25 @@ const ProductsPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
+  const fetchProducts = useCallback(async (page: number, size: number) => {
+    try {
+      const response = await axiosApi.get(`/products?page=${page}&pageSize=${size}`);
+      setTotalPages(Math.ceil(response.data?.total / size));
+      console.log(response.data);
+      setProducts(response.data?.datas);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  }, [setTotalPages, setProducts]);
+
   useEffect(() => {
     fetchProducts(currentPage, pageSize);
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize, fetchProducts]);
 
   const handlePageChange = (newPage: number) => {
     // console.log('NewPage:LL:  ', newPage)
     setCurrentPage(newPage);
     fetchProducts(newPage, pageSize);
-  };
-
-  const fetchProducts = async (page: number, size: number) => {
-    try {
-      const response = await axiosApi.get(`/products?page=${page}&pageSize=${size}`);
-      setTotalPages(Math.ceil(response.data?.total / pageSize))
-      console.log(response.data)
-      setProducts(response.data?.datas);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    }
   };
 
   return (
