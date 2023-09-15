@@ -130,8 +130,8 @@ const CreateProductPage = () => {
               <FormLabel>Products</FormLabel>
               <AutoComplete openOnFocus multiple onChange={onChangeProduct}>
                 <AutoCompleteInput variant="filled">
-                  {({ tags }) =>
-                    tags.map((tag, tid) => (
+                  {({ tags }: { tags?: Array<any> }) =>
+                    tags?.map((tag: any, tid: number) => (
                       <AutoCompleteTag
                         key={tid}
                         label={tag.label}
