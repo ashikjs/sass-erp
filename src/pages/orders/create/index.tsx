@@ -1,22 +1,29 @@
 import {
+  Alert,
+  AlertIcon,
   Box,
+  Button,
   Container,
-  Heading,
   FormControl,
   FormLabel,
-  Input,
-  Textarea,
-  Button,
-  SimpleGrid,
+  Heading,
   HStack,
-  useRadioGroup,
+  Input,
   NumberInput,
-  NumberInputField, AlertIcon, Alert,
+  NumberInputField,
+  SimpleGrid,
+  Textarea,
 } from "@chakra-ui/react";
-import {useState} from "react";
-
-import RadioCard from "../../../app/components/radioCard/RadioCard";
-import axiosApi from "../../../app/utiles/axiosApi"; // Import axios or your preferred HTTP client
+import {useCallback, useEffect, useState} from "react";
+import axiosApi from "../../../app/utiles/axiosApi";
+import {DeleteIcon} from "@chakra-ui/icons";
+import {
+  AutoComplete,
+  AutoCompleteInput,
+  AutoCompleteItem,
+  AutoCompleteList,
+  AutoCompleteTag
+} from "@choc-ui/chakra-autocomplete";
 
 const CreateProductPage = () => {
   const initialFormData = {
@@ -33,34 +40,34 @@ const CreateProductPage = () => {
 
   const [formData, setFormData] = useState(initialFormData);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [products, setProducts] = useState<any[]>([]);
+  const [selectedProducts, setSelectedProducts] = useState<any[]>([]);
 
-  const onChangeCategory = (value: any) => {
-    setFormData({...formData, ['categoryId']: value});
-  }
-
+  const onChangeProduct = (ides: string[]) => {
+    // console.log(ides)
+    ides.map( (id: string) => {
+     const sPrdduct: any = products.find( (p: any) => p._id == id)
+      setSelectedProducts([...selectedProducts, sPrdduct])
+    })
+  };
   const handleChange = (e: any) => {
     const {name, value} = e.target;
     setFormData({...formData, [name]: value});
   };
 
-  const categories: any[] = [
-    {
-      id: '64ebda78355b39e2e2d95d57',
-      name: 'Watch'
-    },
-    {
-      id: '64ebd95f355b39e2e2d95d53',
-      name: 'SunGlass'
+  const fetchProducts = useCallback(async () => {
+    try {
+      const response = await axiosApi.get(`/products?page=0&pageSize=1000`);
+      setProducts(response.data?.datas);
+      console.log('products::', response.data?.datas)
+    } catch (error) {
+      console.error('Error fetching categories:', error);
     }
-  ]
+  }, [setProducts]);
 
-  const {getRootProps, getRadioProps} = useRadioGroup({
-    name: 'categoryId',
-    defaultValue: formData.categoryId,
-    onChange: onChangeCategory,
-  })
-
-  const group = getRootProps()
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -74,7 +81,7 @@ const CreateProductPage = () => {
       // Hide the success notification after 1 second (1000 milliseconds)
       setTimeout(() => {
         setIsSuccess(false);
-      }, 1000*6);
+      }, 1000 * 6);
       // Handle success, e.g., show a success message, reset the form, or redirect
     } catch (error: any) {
       console.error("Error creating product:", error);
@@ -87,26 +94,26 @@ const CreateProductPage = () => {
       <Box p={4}>
         {isSuccess && (
           <Alert status="success" mt={4} mb={4}>
-            <AlertIcon />
+            <AlertIcon/>
             Product added successfully!
           </Alert>
         )}
-        <Heading>Add Product</Heading>
+        <Heading>Create Order</Heading>
         <form onSubmit={handleSubmit}>
-          <FormControl mt={4}>
-            <FormLabel>Name</FormLabel>
-            <Input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </FormControl>
-
           <SimpleGrid columns={2} spacing={2}>
             <FormControl mt={4}>
-              <FormLabel>Quantity</FormLabel>
+              <FormLabel>Customer Name</FormLabel>
+              <Input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Phone Number</FormLabel>
               <NumberInput
                 name="quantity"
                 value={formData.quantity}
@@ -117,9 +124,39 @@ const CreateProductPage = () => {
                 <NumberInputField/>
               </NumberInput>
             </FormControl>
-
+          </SimpleGrid>
+          <SimpleGrid columns={2} spacing={2}>
             <FormControl mt={4}>
-              <FormLabel>Price</FormLabel>
+              <FormLabel>Products</FormLabel>
+              <AutoComplete openOnFocus multiple onChange={onChangeProduct}>
+                <AutoCompleteInput variant="filled">
+                  {({ tags }) =>
+                    tags.map((tag, tid) => (
+                      <AutoCompleteTag
+                        key={tid}
+                        label={tag.label}
+                        onRemove={tag.onRemove}
+                      />
+                    ))
+                  }
+                </AutoCompleteInput>
+                <AutoCompleteList>
+                  {products && products.map((product: any, cid: number) => (
+                    <AutoCompleteItem
+                      key={`option-${cid}`}
+                      value={product._id}
+                      label={product.name}
+                      textTransform="capitalize"
+                      _selected={{ bg: "whiteAlpha.50" }}
+                      _focus={{ bg: "whiteAlpha.100" }}
+                    >
+                    </AutoCompleteItem>
+                  ))}
+                </AutoCompleteList>
+              </AutoComplete>
+            </FormControl>
+            <FormControl mt={4}>
+              <FormLabel>Total Price</FormLabel>
               <NumberInput
                 name="price"
                 value={formData.price}
@@ -132,53 +169,40 @@ const CreateProductPage = () => {
                 <NumberInputField/>
               </NumberInput>
             </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>SKU</FormLabel>
-              <Input
-                type="text"
-                name="sku"
-                value={formData.sku}
-                onChange={handleChange}
-                required
-              />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>SL</FormLabel>
-              <Input
-                type="text"
-                name="serialNumber"
-                value={formData.serialNumber}
-                onChange={handleChange}
-                required
-              />
-            </FormControl>
           </SimpleGrid>
 
-          <FormControl mt={4} display='none'>
-            <FormLabel>Images</FormLabel>
-            <Input type='file'
-                   name='imageUrl'
-                   placeholder='Upload image'
-                   value={formData.imageUrl}
-                   onChange={handleChange}
-            />
-          </FormControl>
-
-          <FormControl mt={4}>
-            <FormLabel>Category</FormLabel>
-            <HStack {...group}>
-              {categories.map((category: any) => {
-                const radio = getRadioProps({value: category.id})
-                return (
-                  <RadioCard key={category.id} {...radio}>
-                    {category.name}
-                  </RadioCard>
-                )
-              })}
-            </HStack>
-          </FormControl>
+          {
+            selectedProducts && selectedProducts.map((product: any, index: number) => (
+              <SimpleGrid columns={3} spacing={2} key={index}>
+                <FormControl mt={4}>
+                  <p>{ product.name }</p>
+                </FormControl>
+                <FormControl mt={4}>
+                  <HStack maxW='100%'>
+                    <p><b>Quantity: </b></p>
+                    <NumberInput
+                      name="quantity"
+                      placeholder="Quantity"
+                      value={formData.quantity}
+                      onChange={(valueString: any, valueNumber: any) => setFormData({
+                        ...formData,
+                        quantity: valueNumber
+                      })}
+                      min={1}
+                      isRequired={true}
+                    >
+                      <NumberInputField/>
+                    </NumberInput>
+                  </HStack>
+                </FormControl>
+                <FormControl mt={4}>
+                  <Button rightIcon={<DeleteIcon/>} colorScheme='red' variant='outline'>
+                    Remove
+                  </Button>
+                </FormControl>
+              </SimpleGrid>
+            ))
+          }
 
           <FormControl mt={4}>
             <FormLabel>Description</FormLabel>
