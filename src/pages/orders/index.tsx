@@ -37,7 +37,7 @@ const OrdersPage = () => {
     <Container maxW='container.xl'>
       <Flex justifyContent="space-between" alignItems="center" marginBottom="20px" marginTop="40px">
         <Heading>Orders</Heading>
-        <NextLink href="/products/create" passHref>
+        <NextLink href="/orders/create" passHref>
           <Button colorScheme="blue">Create Order</Button>
         </NextLink>
       </Flex>
