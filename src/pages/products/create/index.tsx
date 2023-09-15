@@ -13,7 +13,7 @@ import {
   NumberInput,
   NumberInputField, AlertIcon, Alert,
 } from "@chakra-ui/react";
-import {useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 import RadioCard from "../../../app/components/radioCard/RadioCard";
 import axiosApi from "../../../app/utiles/axiosApi"; // Import axios or your preferred HTTP client
@@ -32,6 +32,7 @@ const CreateProductPage = () => {
   }
 
   const [formData, setFormData] = useState(initialFormData);
+  const [categories, setCategories] = useState<any>([]);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const onChangeCategory = (value: any) => {
@@ -43,17 +44,6 @@ const CreateProductPage = () => {
     setFormData({...formData, [name]: value});
   };
 
-  const categories: any[] = [
-    {
-      id: '64ebda78355b39e2e2d95d57',
-      name: 'Watch'
-    },
-    {
-      id: '64ebd95f355b39e2e2d95d53',
-      name: 'SunGlass'
-    }
-  ]
-
   const {getRootProps, getRadioProps} = useRadioGroup({
     name: 'categoryId',
     defaultValue: formData.categoryId,
@@ -61,6 +51,20 @@ const CreateProductPage = () => {
   })
 
   const group = getRootProps()
+
+  const fetchCategories = useCallback(async () => {
+    try {
+      const response = await axiosApi.get(`/categories?page=0&pageSize=50`);
+      // console.log(response.data)
+      setCategories(response.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  }, [setCategories]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -74,7 +78,7 @@ const CreateProductPage = () => {
       // Hide the success notification after 1 second (1000 milliseconds)
       setTimeout(() => {
         setIsSuccess(false);
-      }, 1000*6);
+      }, 1000 * 6);
       // Handle success, e.g., show a success message, reset the form, or redirect
     } catch (error) {
       console.error("Error creating product:", error);
@@ -87,7 +91,7 @@ const CreateProductPage = () => {
       <Box p={4}>
         {isSuccess && (
           <Alert status="success" mt={4} mb={4}>
-            <AlertIcon />
+            <AlertIcon/>
             Product added successfully!
           </Alert>
         )}
@@ -169,10 +173,10 @@ const CreateProductPage = () => {
           <FormControl mt={4}>
             <FormLabel>Category</FormLabel>
             <HStack {...group}>
-              {categories.map((category: any) => {
-                const radio = getRadioProps({value: category.id})
+              {categories?.map((category: any) => {
+                const radio = getRadioProps({value: category._id})
                 return (
-                  <RadioCard key={category.id} {...radio}>
+                  <RadioCard key={category._id} {...radio}>
                     {category.name}
                   </RadioCard>
                 )

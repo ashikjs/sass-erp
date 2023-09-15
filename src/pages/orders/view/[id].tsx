@@ -11,15 +11,13 @@ import {
   Th,
   Tbody,
   Td,
-  HStack,
-  Link,
-  IconButton
+  BreadcrumbItem, Breadcrumb, BreadcrumbLink
 } from '@chakra-ui/react';
 
 import axiosApi from "./../../../app/utiles/axiosApi";
 import styles from "src/app/components/orderList/OrderList.module.scss";
-import NextLink from "next/link";
-import {EditIcon, ViewIcon} from "@chakra-ui/icons";
+import Link from "next/link";
+import {ChevronRightIcon} from "@chakra-ui/icons";
 
 const OrderDetails = () => {
   const router = useRouter();
@@ -58,7 +56,17 @@ const OrderDetails = () => {
       <Box p={4}>
         {order ? (
           <>
-            <Heading size="md" paddingBottom={2}>{order.invoiceId}</Heading>
+            <Breadcrumb fontWeight='medium' separator={<ChevronRightIcon color='gray.500' />}>
+              <BreadcrumbItem>
+                <BreadcrumbLink as={Link} href='/'>Home</BreadcrumbLink>
+              </BreadcrumbItem>
+
+              <BreadcrumbItem>
+                <BreadcrumbLink as={Link} href='/orders'>Order List</BreadcrumbLink>
+              </BreadcrumbItem>
+            </Breadcrumb>
+
+            <Heading size="md" paddingBottom={2} marginTop={5}>{order.invoiceId}</Heading>
             <Text paddingBottom={1}><b>Price</b>: {order.cashAmount}</Text>
             <Text paddingBottom={1}><b>Category</b>: {order.productCategory}</Text>
             <Text paddingBottom={1}><b>Parcel Type</b>: {order.parcelType}</Text>
