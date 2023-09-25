@@ -17,25 +17,17 @@ import {
 import {useCallback, useEffect, useState} from "react";
 import axiosApi from "../../../app/utiles/axiosApi";
 import {DeleteIcon} from "@chakra-ui/icons";
-import {
-  AutoComplete,
-  AutoCompleteInput,
-  AutoCompleteItem,
-  AutoCompleteList,
-  AutoCompleteTag
-} from "@choc-ui/chakra-autocomplete";
+
+import AutoCompleteComponent from "src/app/components/autoComplete/AutoComplete";
 
 const CreateProductPage = () => {
   const initialFormData = {
     name: '',
     description: '',
-    price: 1,
+    price: '',
     status: "ACTIVE",
-    quantity: 1,
-    sku: '',
-    serialNumber: '',
-    imageUrl: '',
-    categoryId: '64ebd95f355b39e2e2d95d53',
+    phoneNumber: '',
+    products: []
   }
 
   const [formData, setFormData] = useState(initialFormData);
@@ -44,11 +36,11 @@ const CreateProductPage = () => {
   const [selectedProducts, setSelectedProducts] = useState<any[]>([]);
 
   const onChangeProduct = (ides: string[]) => {
-    // console.log(ides)
-    ides.map( (id: string) => {
-     const sPrdduct: any = products.find( (p: any) => p._id == id)
-      setSelectedProducts([...selectedProducts, sPrdduct])
+    let sProducts: any[] = []
+    ides.map((id: string) => {
+      sProducts.push(products.find((p: any) => p._id == id))
     })
+    setSelectedProducts(sProducts)
   };
   const handleChange = (e: any) => {
     const {name, value} = e.target;
@@ -116,8 +108,8 @@ const CreateProductPage = () => {
               <FormLabel>Phone Number</FormLabel>
               <NumberInput
                 name="quantity"
-                value={formData.quantity}
-                onChange={(valueString: any, valueNumber: any) => setFormData({...formData, quantity: valueNumber})}
+                value={formData.phoneNumber}
+                onChange={(valueString: any, valueNumber: any) => setFormData({...formData, phoneNumber: valueNumber})}
                 min={1}
                 isRequired={true}
               >
@@ -128,32 +120,11 @@ const CreateProductPage = () => {
           <SimpleGrid columns={2} spacing={2}>
             <FormControl mt={4}>
               <FormLabel>Products</FormLabel>
-              <AutoComplete openOnFocus multiple onChange={onChangeProduct}>
-                <AutoCompleteInput variant="filled">
-                  {({ tags }: { tags?: Array<any> }) =>
-                    tags?.map((tag: any, tid: number) => (
-                      <AutoCompleteTag
-                        key={tid}
-                        label={tag.label}
-                        onRemove={tag.onRemove}
-                      />
-                    ))
-                  }
-                </AutoCompleteInput>
-                <AutoCompleteList>
-                  {products && products.map((product: any, cid: number) => (
-                    <AutoCompleteItem
-                      key={`option-${cid}`}
-                      value={product._id}
-                      label={product.name}
-                      textTransform="capitalize"
-                      _selected={{ bg: "whiteAlpha.50" }}
-                      _focus={{ bg: "whiteAlpha.100" }}
-                    >
-                    </AutoCompleteItem>
-                  ))}
-                </AutoCompleteList>
-              </AutoComplete>
+              <AutoCompleteComponent
+                products={products}
+                onChangeProduct={onChangeProduct}
+                placeholder="Search and select"
+              />
             </FormControl>
             <FormControl mt={4}>
               <FormLabel>Total Price</FormLabel>
@@ -173,9 +144,9 @@ const CreateProductPage = () => {
 
           {
             selectedProducts && selectedProducts.map((product: any, index: number) => (
-              <SimpleGrid columns={3} spacing={2} key={index}>
+              <SimpleGrid columns={2} spacing={2} key={index}>
                 <FormControl mt={4}>
-                  <p>{ product.name }</p>
+                  <p>{product.name}</p>
                 </FormControl>
                 <FormControl mt={4}>
                   <HStack maxW='100%'>
@@ -183,7 +154,7 @@ const CreateProductPage = () => {
                     <NumberInput
                       name="quantity"
                       placeholder="Quantity"
-                      value={formData.quantity}
+                      value={1}
                       onChange={(valueString: any, valueNumber: any) => setFormData({
                         ...formData,
                         quantity: valueNumber
@@ -195,11 +166,9 @@ const CreateProductPage = () => {
                     </NumberInput>
                   </HStack>
                 </FormControl>
-                <FormControl mt={4}>
-                  <Button rightIcon={<DeleteIcon/>} colorScheme='red' variant='outline'>
-                    Remove
-                  </Button>
-                </FormControl>
+                {/*<FormControl mt={4}>*/}
+                {/*  <Button rightIcon={<DeleteIcon/>} colorScheme='red' variant='outline'/>*/}
+                {/*</FormControl>*/}
               </SimpleGrid>
             ))
           }
