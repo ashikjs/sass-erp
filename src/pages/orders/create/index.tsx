@@ -16,7 +16,6 @@ import {
 } from "@chakra-ui/react";
 import {useCallback, useEffect, useState} from "react";
 import axiosApi from "../../../app/utiles/axiosApi";
-import {DeleteIcon} from "@chakra-ui/icons";
 
 import AutoCompleteComponent from "src/app/components/autoComplete/AutoComplete";
 
@@ -38,10 +37,22 @@ const CreateProductPage = () => {
   const onChangeProduct = (ides: string[]) => {
     let sProducts: any[] = []
     ides.map((id: string) => {
-      sProducts.push(products.find((p: any) => p._id == id))
+      const tempProduct: any = products.find((p: any) => p._id == id)
+      tempProduct.quantity = 1
+      sProducts.push(tempProduct)
     })
     setSelectedProducts(sProducts)
   };
+
+  const updateProductQuantity = (id: any, quantity: number) => {
+    console.log('updateProductQuantity:: ')
+    const tempP: any = selectedProducts.map((p: any) => {
+      if (p._id == id) p.quantity = quantity
+      return p
+    })
+    setSelectedProducts(tempP)
+  }
+
   const handleChange = (e: any) => {
     const {name, value} = e.target;
     setFormData({...formData, [name]: value});
@@ -63,7 +74,8 @@ const CreateProductPage = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
+    formData.products = selectedProducts
+    console.log(formData)
     try {
       const response = await axiosApi.post("/products", formData); // Replace with your API endpoint
       console.log("Product created:", response.data);
@@ -154,11 +166,8 @@ const CreateProductPage = () => {
                     <NumberInput
                       name="quantity"
                       placeholder="Quantity"
-                      value={1}
-                      onChange={(valueString: any, valueNumber: any) => setFormData({
-                        ...formData,
-                        quantity: valueNumber
-                      })}
+                      value={product.quantity}
+                      onChange={(valueString: any, valueNumber: any) => updateProductQuantity(product._id, valueNumber)}
                       min={1}
                       isRequired={true}
                     >
