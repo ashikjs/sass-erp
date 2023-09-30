@@ -17,20 +17,22 @@ import {
 import {useCallback, useEffect, useState} from "react";
 import axiosApi from "../../../app/utiles/axiosApi";
 
-import AutoCompleteComponent from "src/app/components/autoComplete/AutoComplete";
+import AutoCompleteComponent from "../../../app/components/autoComplete/AutoComplete";
 
 const CreateProductPage = () => {
   const initialFormData = {
     name: '',
     description: '',
     price: '',
-    status: "ACTIVE",
+    status: "PENDING",
     phoneNumber: '',
+    education: '',
     products: []
   }
 
   const [formData, setFormData] = useState(initialFormData);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isShowProducts, setIsShowProducts] = useState(true);
   const [products, setProducts] = useState<any[]>([]);
   const [selectedProducts, setSelectedProducts] = useState<any[]>([]);
 
@@ -45,7 +47,6 @@ const CreateProductPage = () => {
   };
 
   const updateProductQuantity = (id: any, quantity: number) => {
-    console.log('updateProductQuantity:: ')
     const tempP: any = selectedProducts.map((p: any) => {
       if (p._id == id) p.quantity = quantity
       return p
@@ -61,8 +62,19 @@ const CreateProductPage = () => {
   const fetchProducts = useCallback(async () => {
     try {
       const response = await axiosApi.get(`/products?page=0&pageSize=1000`);
-      setProducts(response.data?.datas);
-      console.log('products::', response.data?.datas)
+      const productFormat: any = response.data?.datas?.map( (product: any) => {
+        return {
+          imageUrl: product.imageUrl,
+          name: product.name,
+          price: product.price,
+          quantity: product.quantity,
+          serialNumber: product.serialNumber,
+          sku: product.sku,
+          _id: product._id
+        }
+      })
+      setProducts(productFormat);
+      // console.log('products::', response.data?.datas)
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -75,17 +87,34 @@ const CreateProductPage = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     formData.products = selectedProducts
-    console.log(formData)
-    try {
-      const response = await axiosApi.post("/products", formData); // Replace with your API endpoint
-      console.log("Product created:", response.data);
-      setIsSuccess(true);
-      setFormData(initialFormData); // Reset the form
+    const payload: any = {
+      products: formData.products,
+      userInfo: {
+        name: formData.name,
+        phone: formData.phoneNumber,
+        education: formData.education
+      },
+      cashAmount: formData.price,
+      status: formData.status,
+      details: formData.description,
+    }
+    // console.log(payload)
 
-      // Hide the success notification after 1 second (1000 milliseconds)
+    try {
+      const response = await axiosApi.post("/orders", payload); // Replace with your API endpoint
+      // console.log("Product created:", response.data);
+      setIsSuccess(true);
+      setIsShowProducts(false);
+      setFormData(initialFormData); // Reset the form
+      setSelectedProducts([])
+      // Hide the success notification after 6 second (1000 milliseconds)
       setTimeout(() => {
         setIsSuccess(false);
       }, 1000 * 6);
+      // Hide the success notification after 0.5 second (1000 milliseconds)
+      setTimeout(() => {
+        setIsShowProducts(true);
+      }, 1000 * 0.5);
       // Handle success, e.g., show a success message, reset the form, or redirect
     } catch (error: any) {
       console.error("Error creating product:", error);
@@ -132,11 +161,11 @@ const CreateProductPage = () => {
           <SimpleGrid columns={2} spacing={2}>
             <FormControl mt={4}>
               <FormLabel>Products</FormLabel>
-              <AutoCompleteComponent
+              {isShowProducts && <AutoCompleteComponent
                 products={products}
                 onChangeProduct={onChangeProduct}
                 placeholder="Search and select"
-              />
+              />}
             </FormControl>
             <FormControl mt={4}>
               <FormLabel>Total Price</FormLabel>
