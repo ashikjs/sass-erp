@@ -20,7 +20,7 @@ import axiosApi from "../../../app/utiles/axiosApi";
 import AutoCompleteComponent from "../../../app/components/autoComplete/AutoComplete";
 
 const CreateProductPage = () => {
-  const initialFormData = {
+  const initialFormData: any = {
     name: '',
     description: '',
     price: '',
