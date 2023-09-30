@@ -92,7 +92,6 @@ const OrderDetails = () => {
                 <Thead>
                   <Tr bgColor="gray.100">
                     <Th p={2}>Name</Th>
-                    <Th p={2}>Category</Th>
                     <Th p={2}>Price</Th>
                     <Th p={2}>quantity</Th>
                   </Tr>
@@ -101,7 +100,6 @@ const OrderDetails = () => {
                   {order.products?.map((product: any) => (
                     <Tr key={product._id}>
                       <Td p={2}>{product?.name}</Td>
-                      <Td p={2}>{product?.category}</Td>
                       <Td p={2}>৳{product.price}</Td>
                       <Td p={2}>{product.quantity}</Td>
                     </Tr>
